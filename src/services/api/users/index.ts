@@ -1,8 +1,11 @@
+import { setUsers } from '@/lib/features/user/userSlice';
+import { useAppDispatch } from '@/lib/hooks';
 import { _useAxios } from '@/services/useAxios';
 import { TUser } from '@/utils/types/users';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export function useGetUsers() {
+	const dispatch = useAppDispatch();
 	const { ...rest } = useQuery({
 		queryKey: ['useGetUsers'],
 		queryFn: async () => {
@@ -12,6 +15,7 @@ export function useGetUsers() {
 					method: 'get',
 				});
 				console.log('resp get users', response?.data);
+				dispatch(setUsers(response?.data as TUser[]));
 				return response?.data as TUser[];
 			} catch (error) {
 				console.log('error get users', error);

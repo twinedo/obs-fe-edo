@@ -7,6 +7,7 @@ export type TUser = {
 	phone: string;
 	website: string;
 	company: TCompany;
+	imageProfile?: string;
 };
 
 export type TCompany = {
