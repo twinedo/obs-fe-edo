@@ -56,14 +56,24 @@ export const userSlice = createSlice({
 		},
 		addUser: (state, action: PayloadAction<TUser>) => {
 			state.users = [...state.users, action.payload];
+			state.searchList = [...state.searchList, action.payload];
 			return state;
 		},
 		removeUser: (state, action: PayloadAction<number>) => {
 			state.users = state.users.filter((user) => user.id !== action.payload);
+			state.searchList = state.searchList.filter(
+				(user) => user.id !== action.payload
+			);
 			return state;
 		},
 		updateUser: (state, action: PayloadAction<TUser>) => {
 			state.users = state.users.map((user) => {
+				if (user.id === action.payload.id) {
+					return action.payload;
+				}
+				return user;
+			});
+			state.searchList = state.searchList.map((user) => {
 				if (user.id === action.payload.id) {
 					return action.payload;
 				}
