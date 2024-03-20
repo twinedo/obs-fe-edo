@@ -67,7 +67,9 @@ export default function Home() {
 		modalMode === 'add'
 			? dispatch(setSelectedUser(initState))
 			: dispatch(setSelectedUser(val!));
-		setIsShowModal(!isShowModal);
+		setTimeout(() => {
+			setIsShowModal(!isShowModal);
+		}, 500);
 	};
 
 	return (
@@ -160,7 +162,14 @@ export default function Home() {
 								setIsEdit(false);
 								setIsShowModal(false);
 							}}>
-							{({ handleBlur, handleChange, values, errors, touched }) => (
+							{({
+								handleBlur,
+								handleChange,
+								handleSubmit,
+								values,
+								errors,
+								touched,
+							}) => (
 								<Form className='flex flex-col gap-5 w-full'>
 									<div className='w-full h-[50px]'>
 										<p className='text-sm text-[#999]'>Name</p>
@@ -196,7 +205,7 @@ export default function Home() {
 											<div className='text-red'>{errors.email}</div>
 										) : null}
 									</div>
-									{modalMode === 'add' ? (
+									{modalMode === 'add' && isEdit && (
 										<div className='flex w-full flex-row gap-4'>
 											<button
 												className='bg-red-500 text-white font-bold p-4 rounded-lg'
@@ -209,7 +218,8 @@ export default function Home() {
 												Submit User
 											</button>
 										</div>
-									) : isEdit ? (
+									)}
+									{modalMode === 'edit' && isEdit && (
 										<div className='flex w-full flex-row gap-4'>
 											<button
 												className='bg-red-500 text-white font-bold p-4 rounded-lg'
@@ -218,11 +228,12 @@ export default function Home() {
 											</button>
 											<button
 												className='bg-cyan-500 text-white font-bold p-4 rounded-lg'
-												type='submit'>
+												onClick={() => handleSubmit()}>
 												Submit Changes
 											</button>
 										</div>
-									) : (
+									)}
+									{modalMode === 'edit' && !isEdit && (
 										<div className='flex w-full flex-row gap-4'>
 											<button
 												className='bg-red-500 text-white font-bold p-4 rounded-lg'
