@@ -22,8 +22,8 @@ export function useGetUsers() {
 				return error;
 			}
 		},
-		refetchOnMount: true,
-		refetchOnReconnect: true,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
 	});
 
 	return { ...rest };

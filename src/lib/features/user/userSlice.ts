@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // Define the initial state using that type
 const initialState = {
 	users: [] as TUser[],
+	searchList: [] as TUser[],
 	detail: {
 		id: 0,
 		name: '',
@@ -46,6 +47,7 @@ export const userSlice = createSlice({
 				newArr.push(item);
 			});
 			state.users = newArr;
+			state.searchList = newArr;
 			return state;
 		},
 		setSelectedUser: (state, action: PayloadAction<TUser>) => {
@@ -69,11 +71,32 @@ export const userSlice = createSlice({
 			});
 			return state;
 		},
+		searchUser: (state, action: PayloadAction<string>) => {
+			const dat = [...state.users];
+			if (action.payload === '') {
+				state.searchList = dat;
+				return state;
+			} else {
+				state.searchList = state.users.filter((user) => {
+					return (
+						user.name.toLowerCase().includes(action.payload.toLowerCase()) ||
+						user.email.toLowerCase().includes(action.payload.toLowerCase())
+					);
+				});
+				return state;
+			}
+		},
 	},
 });
 
-export const { setUsers, setSelectedUser, addUser, removeUser, updateUser } =
-	userSlice.actions;
+export const {
+	setUsers,
+	setSelectedUser,
+	addUser,
+	searchUser,
+	removeUser,
+	updateUser,
+} = userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectUser = (state: RootState) => state.users.users;

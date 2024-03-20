@@ -5,6 +5,7 @@ import Search from '@/components/molecules/search';
 import {
 	addUser,
 	removeUser,
+	searchUser,
 	setSelectedUser,
 	updateUser,
 } from '@/lib/features/user/userSlice';
@@ -15,7 +16,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useState } from 'react';
 import { IoIosMore, IoMdCloseCircleOutline } from 'react-icons/io';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 type TResponseUsers = {
@@ -34,6 +35,7 @@ export default function Home() {
 	const { isFetching } = useGetUsers() as TResponseUsers;
 	const dispatch = useAppDispatch();
 	const userList = useAppSelector((state) => state.users.users);
+	const searchList = useAppSelector((state) => state.users.searchList);
 	const userDetail = useAppSelector((state) => state.users.detail);
 
 	const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
@@ -76,7 +78,7 @@ export default function Home() {
 		<main className='flex min-h-screen flex-col items-center justify-start p-24'>
 			<div className="relative w-full flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]"></div>
 
-			<Search onSearch={(text: string) => console.log(text)} />
+			<Search onSearch={(text: string) => dispatch(searchUser(text))} />
 			<button
 				className='bg-blue-500 text-white font-bold p-4 rounded-lg items-start justify-start'
 				onClick={() => {
@@ -88,7 +90,7 @@ export default function Home() {
 			</button>
 			<div className='mb-32 mt-5 grid grid-cols-2 gap-5 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left'>
 				{isFetching && <div className='w-full text-lg'>Fetching...</div>}
-				{userList?.map((o, i) => (
+				{searchList?.map((o, i) => (
 					<Card
 						key={o.id.toString()}
 						onClick={() => {
